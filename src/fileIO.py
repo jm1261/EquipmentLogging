@@ -3,7 +3,7 @@ import numpy as np
 import xml.etree.ElementTree as ET
 
 
-def load_sputter_log(file_path : str) -> tuple[list, list, list]:
+def QCM_160(file_path : str) -> tuple[list, list, list]:
     """
     Function Details
     ================
@@ -41,6 +41,10 @@ def load_sputter_log(file_path : str) -> tuple[list, list, list]:
     ----------
     Updated and adapted function from a previous repository for updated data
     processing methods.
+
+    21/02/2024
+    ----------
+    Update name to correspond to device name.
 
     """
     time, thickness, rate = np.genfromtxt(

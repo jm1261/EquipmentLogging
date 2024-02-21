@@ -65,8 +65,7 @@ def sputter_log(file_path : str,
 
     """
     file_name = fp.get_filename(file_path=file_path)
-    time, average_thickness, average_rate = io.load_sputter_log(
-        file_path=file_path)
+    time, average_thickness, average_rate = io.QCM_160(file_path=file_path)
     file_out = Path(f'{out_path}/{file_name}_log.png')
     if file_out.is_file():
         pass
