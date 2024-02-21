@@ -1,0 +1,54 @@
+{
+  "width": 15,
+  "height": 9,
+  "dpi": 600,
+  "line": "True",
+  "grid": "False",
+  "legend_loc": 0,
+  "legend_col": 1,
+  "legend_size": 10,
+  "axis_fontsize": 15,
+  "title_fontsize": 15,
+  "label_size": 10,
+  "batch_name": [
+    "AK1",
+    "AK2",
+    "AK3",
+    "AK4"
+  ],
+  "data_path": "K:\\Josh\\Post_Doc\\NIL_Log",
+  "data_files": [
+    "AK1_20230710_143157.xml",
+    "AK2_20230710_144210.xml",
+    "AK3_20230710_144908.xml",
+    "AK4_20230710_145527.xml"
+  ],
+  "out_paths": [
+    "K:\\Josh\\Post_Doc\\NIL_Log\\AK1_20230710_143157_log.png",
+    "K:\\Josh\\Post_Doc\\NIL_Log\\AK2_20230710_144210_log.png",
+    "K:\\Josh\\Post_Doc\\NIL_Log\\AK3_20230710_144908_log.png",
+    "K:\\Josh\\Post_Doc\\NIL_Log\\AK4_20230710_145527_log.png"
+  ],
+  "log_details": [
+    [
+      "UNSAVED RECIPE",
+      "Vacuum(Vac_1; Threshold_130.0; ForceVac_1; VacTime_0.0) <br> Hold(Time_0.1; Pres_1.2; UV_0) <br> Hold(Time_1.0; Pres_0.0; UV_25)",
+      "This is our standard recipe for UV imprint in mrNIL210"
+    ],
+    [
+      "UNSAVED RECIPE",
+      "Vacuum(Vac_1; Threshold_130.0; ForceVac_1; VacTime_0.0) <br> Hold(Time_0.1; Pres_1.2; UV_0) <br> Hold(Time_1.0; Pres_0.0; UV_50)",
+      "This is our standard recipe for UV imprint in mrNIL210"
+    ],
+    [
+      "UNSAVED RECIPE",
+      "Vacuum(Vac_1; Threshold_130.0; ForceVac_1; VacTime_0.0) <br> Hold(Time_0.1; Pres_1.2; UV_0) <br> Hold(Time_1.0; Pres_0.0; UV_75)",
+      "This is our standard recipe for UV imprint in mrNIL210"
+    ],
+    [
+      "UNSAVED RECIPE",
+      "Vacuum(Vac_1; Threshold_130.0; ForceVac_1; VacTime_0.0) <br> Hold(Time_0.1; Pres_1.2; UV_0) <br> Hold(Time_1.0; Pres_0.0; UV_100)",
+      "This is our standard recipe for UV imprint in mrNIL210"
+    ]
+  ]
+}
