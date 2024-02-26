@@ -616,7 +616,7 @@ def evaporator_plot(time : list,
         fontsize=plot_dict['axis_fontsize'],
         fontweight='bold')
     ax3.set_ylabel(
-        'Deviation [au]',
+        'Deviation [%]',
         fontsize=plot_dict["axis_fontsize"],
         fontweight='bold',
         rotation=270,
