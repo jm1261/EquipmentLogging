@@ -18,6 +18,6 @@ Data logging software for a variety of nanofabrication equipment, including a na
 
 ## QCM-160
 
-## QCM-360
+## QCM-310
 
 </div>

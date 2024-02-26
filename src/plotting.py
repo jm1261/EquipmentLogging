@@ -273,8 +273,8 @@ def CNIplot(data : list,
 def sputterer_plots(time : list,
                     thickness : list,
                     rate : list,
-                    plot_dict : dict,
-                    out_path : str) -> None:
+                    out_path : str,
+                    plot_dict : dict) -> None:
     """
     Function Details
     ================
@@ -384,6 +384,284 @@ def sputterer_plots(time : list,
         axis='y',
         which='major',
         labelsize=plot_dict["label_size"])
+    plt.savefig(
+        out_path,
+        bbox_inches='tight')
+    fig.clf()
+    plt.cla()
+    plt.close(fig)
+
+
+def extract_unique_processes(processes : list) -> tuple[list, list]:
+    """
+    Function Details
+    ================
+    Find the transition phases in the evaporator log.
+
+    Parameters
+    ----------
+    processes: list
+        List of all the evaporator processes with time stamp.
+
+    Returns
+    -------
+    process_indices, unique_processes: list
+        List containing the indices at which a transition occurs and the phase
+        at those indices.
+
+    See Also
+    --------
+    None
+
+    Notes
+    -----
+    None
+
+    Example
+    -------
+    None
+
+    ----------------------------------------------------------------------------
+    Update History
+    ==============
+
+    26/02/2024
+    ----------
+    Created.
+
+    """
+
+
+def evaporator_plot(time : list,
+                    processes : list,
+                    thickness : list,
+                    rate : list,
+                    deviation : list,
+                    power : list,
+                    out_path : str,
+                    plot_dict : dict) -> None:
+    """
+    Function Details
+    ================
+    Plot the electron beam evaporator log file.
+
+    Parameters
+    ----------
+    time, processes, thickness, rate, deviation, power: list
+        Run time, processes, deposition thickness, deposition rate, deposition
+        deviation, and deposition power, all from the log file and all of the
+        same length.
+    out_path: string
+        Path to save.
+    plot_dict: dictionary
+        Plot settings dictionary, containing:
+            {
+                "width": plot width,\n
+                "height": plot height,\n
+                "dpi": dots per square inch,\n
+                "grid": True/False,\n
+                "legend_loc": legend location,\n
+                "legend_col": legend column number,\n
+                "legend_size": size of legend text,\n
+                "axis_fontsize": font size for axis labels,\n
+                "label_size": size for tick labels
+            }
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    extract_unique_processes
+
+    Notes
+    -----
+    Unique processes:
+        The processes list contains a list of the evaporator steps at every time
+        step. This is not necessary to plot, instead the list is used to mark
+        the main thickness graph with the transitions in this phase. The indices
+        at which these transitions occur is found using the function
+        extract_unique_processes
+
+    Axes:
+        The evaporator data is a thickness, a rate, a deviation, a power, and a
+        list of processes. The thickness is the main priority and has its own
+        axes, while the rate, deviation, and power are plotted on a subplot. The
+        list of processes is used as an indicator on the main plot. These are
+        drawn with grey dotted lines and marked with unique process identifiers.
+        The process indicator is offset by a 2/3 or 1/3 y-axis locator to avoid
+        the labels crossing over one another.
+
+    Legend:
+        The legend can fit outside of the axes due to a triple y-axis on the
+        second plot, which allows for a better spread of information across the
+        graph.
+
+    Example
+    -------
+    None
+
+    ----------------------------------------------------------------------------
+    Update History
+    ==============
+
+    23/02/2024
+    ----------
+    Created.
+
+    """
+
+    """ Get the unique processes and indices """
+    process_indices, unique_processes = extract_unique_processes(
+        processes=processes)
+
+    """ Set up figure """
+    colors = plt.cm.tab10.colors[:7]
+    fig = plt.figure(
+        figsize=[
+            cm_to_inches(cm=plot_dict["width"]),
+            cm_to_inches(cm=plot_dict["height"]) * 2],
+        dpi=plot_dict["dpi"])
+    grid = plt.GridSpec(
+        nrows=2,
+        ncols=1)
+
+    """ Set up axes """
+    ax1 = fig.add_subplot(grid[0, 0])
+    ax2 = fig.add_subplot(grid[1, 0])
+    ax3 = ax2.twinx()
+    ax4 = ax2.twinx()
+    ax4.spines.right.set_position(('axes', 1.3))
+
+    """ Set up process indicators """
+    for index, process_index in enumerate(process_indices):
+        ax1.axvline(
+            x=time[process_index],
+            color='lightgray',
+            linestyle='--',
+            linewidth=2)
+        if index % 2:
+            midpoint_y = (max(thickness) + min(thickness) ) / 1.5
+        else:
+            midpoint_y = (max(thickness) + min(thickness) ) / 3
+        ax1.text(
+            x=time[process_index],
+            y=midpoint_y,
+            s=unique_processes[index],
+            rotation=270,
+            fontsize=5,
+            fontweight='bold',
+            ha='center',
+            va='center')
+
+    """ Data lines """
+    line1 = ax1.plot(
+        time,
+        thickness,
+        color=colors[0],
+        lw=2,
+        label='Thickness')
+    line2 = ax2.plot(
+        time,
+        rate,
+        color=colors[2],
+        lw=2,
+        label='Rate')
+    line3 = ax3.plot(
+        time,
+        deviation,
+        color=colors[3],
+        lw=2,
+        label='Deviation')
+    line4 = ax4.plot(
+        time,
+        power,
+        color=colors[4],
+        lw=2,
+        label='Power')
+
+    """ Grid """
+    ax1.grid(
+        visible=True,
+        alpha=0.5)
+
+    """ Legend """
+    lines = line1 + line2 + line3 + line4
+    labels = [line.get_label() for line in lines]
+    ax1.legend(
+        lines,
+        labels,
+        frameon=True,
+        loc='center right',
+        bbox_to_anchor=(1.5, 0.5),
+        ncol=plot_dict["legend_col"],
+        prop={"size": plot_dict["legend_size"] * 0.8})
+
+    """ Labels """
+    ax1.set_xlabel(
+        'Time [min]',
+        fontsize=plot_dict["axis_fontsize"],
+        fontweight='bold')
+    ax2.set_xlabel(
+        'Time [min]',
+        fontsize=plot_dict["axis_fontsize"],
+        fontweight='bold')
+    ax1.set_ylabel(
+        'Thickness [nm]',
+        fontsize=plot_dict["axis_fontsize"],
+        fontweight='bold')
+    ax2.set_ylabel(
+        'Rate [nm/s]',
+        fontsize=plot_dict['axis_fontsize'],
+        fontweight='bold')
+    ax3.set_ylabel(
+        'Deviation [au]',
+        fontsize=plot_dict["axis_fontsize"],
+        fontweight='bold',
+        rotation=270,
+        labelpad=20)
+    ax4.set_ylabel(
+        'Power [%]',
+        fontsize=plot_dict['axis_fontsize'],
+        fontweight='bold',
+        rotation=270,
+        labelpad=20)
+    ax1.set_title(
+        'Thickness',
+        fontsize=plot_dict["title_fontsize"],
+        fontweight='bold')
+    ax2.set_title(
+        'Parameters',
+        fontsize=plot_dict["title_fontsize"],
+        fontweight='bold')
+
+    """ Ticks """
+    ax1.xaxis.set_minor_locator(AutoMinorLocator())
+    ax1.yaxis.set_minor_locator(AutoMinorLocator())
+    ax2.xaxis.set_minor_locator(AutoMinorLocator())
+    ax2.yaxis.set_minor_locator(AutoMinorLocator())
+    ax3.yaxis.set_minor_locator(AutoMinorLocator())
+    ax4.yaxis.set_minor_locator(AutoMinorLocator())
+    ax1.tick_params(
+        axis='both',
+        which='major',
+        labelsize=plot_dict["label_size"])
+    ax2.tick_params(
+        axis='both',
+        which='major',
+        labelsize=plot_dict["label_size"])
+    ax3.tick_params(
+        axis='y',
+        which='major',
+        labelsize=plot_dict["label_size"])
+    ax4.tick_params(
+        axis='y',
+        which='major',
+        labelsize=plot_dict["label_size"])
+
+    """ Save """
+    fig.tight_layout()
     plt.savefig(
         out_path,
         bbox_inches='tight')
